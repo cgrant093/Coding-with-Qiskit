@@ -7,32 +7,34 @@ from qiskit.providers.aer import QasmSimulator
 from qiskit.visualization import plot_histogram
 
 # set secret number 
-secretNumber = '101001'
+secretNumber = '10100101'
 
 # Create a Quantum Circuit acting on the q register
-circuit = QuantumCircuit(6+1, 6)
+circuit = QuantumCircuit(len(secretNumber)+1, len(secretNumber))
 
-# apply H gate to first 6 qubits
-circuit.h([0,1,2,3,4,5])
+# apply H gate to all but last qubit
+circuit.h(range(len(secretNumber)))
 # last gate gets X gate then H gate
-circuit.x(6)
-circuit.h(6)
+circuit.x(len(secretNumber))
+circuit.h(len(secretNumber))
 circuit.barrier()
 
 # build box with secret number
 #   any bit that has a '1' gets a controlled X gate 
-#   applied with 7th qubit (remember bits read backwards)
-circuit.cx(5,6)
-circuit.cx(3,6)
-circuit.cx(0,6)
+#   applied with last qubit (remember bits read backwards)
+
+for ii, yesno in enumerate(reversed(secretNumber)):
+    if yesno == '1':
+        circuit.cx(ii,len(secretNumber))
+        
 circuit.barrier()
 
 # apply H gate to first 6 qubits
-circuit.h([0,1,2,3,4,5])
+circuit.h(range(len(secretNumber)))
 circuit.barrier()
 
 # now to measure
-circuit.measure([0,1,2,3,4,5],[0,1,2,3,4,5])
+circuit.measure(range(len(secretNumber)),range(len(secretNumber)))
 
 # Use Aer's qasm_simulator
 simulator = QasmSimulator()
@@ -54,5 +56,9 @@ print(counts)
 # and the '1' is teleported from q0
 
 # Draw the circuit (with matplotlib)
-circuit.draw(output='mpl')
-plt.show()
+#circuit.draw(output='mpl')
+#plt.show()
+
+# Plot a histogram
+#plot_histogram(counts)
+#plt.show()
