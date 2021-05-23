@@ -52,8 +52,6 @@ result = job.result()
 # Returns counts
 counts = result.get_counts(circuit)
 print(counts)
-# all results start with a '1' because that's q2/c2
-# and the '1' is teleported from q0
 
 # Draw the circuit (with matplotlib)
 #circuit.draw(output='mpl')
