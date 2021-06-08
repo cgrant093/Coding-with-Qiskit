@@ -11,7 +11,7 @@ simulator = QasmSimulator()
 
 # Create a oracle operator
 oracle = QuantumCircuit(2, name='oracle')
-oracle.cz(0,1)      #flips sign of winning state, 11
+oracle.cz(0,1)      #flips sign of winning state, (specific to |11> being the winning state) 
 oracle.to_gate()    #makes oracle its own gate
 
 # create reflection operator
@@ -25,7 +25,7 @@ reflection.cz(0,1)
 reflection.h([0,1]) 
 reflection.to_gate() #turns refelction into a gate
 
-# create circuit that flips winning answer: 11
+# create circuit that flips winning answer: |11>
 grover_circ = QuantumCircuit(2,2)
 # apply H gate to all qubits
 grover_circ.h([0,1]) #prepares superposition state 
